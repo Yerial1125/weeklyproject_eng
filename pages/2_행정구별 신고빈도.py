@@ -3,8 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import seaborn as sns
-from tkinter.tix import COLUMN
-from pyparsing import empty
 
 st.set_page_config(
     page_title = '구급출동 데이터 분석',

@@ -37,6 +37,14 @@ st.write('조건')
 num = st.checkbox('차트내 값 표시')
 st.markdown("---")
 
+plt.rc('font', size=8) # controls default text sizes
+plt.rc('axes', titlesize=8) # fontsize of the axes title
+plt.rc('axes', labelsize=8) # fontsize of the x and y labels
+plt.rc('xtick', labelsize=8) # fontsize of the tick labels
+plt.rc('ytick', labelsize=8) # fontsize of the tick labels
+plt.rc('legend', fontsize=8) # legend fontsize
+plt.rc('figure', titlesize=8)
+
 if num :
     annot = True
 else:
