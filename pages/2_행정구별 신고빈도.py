@@ -13,7 +13,7 @@ st.set_page_config(
 
 
 # 행정구별 신고빈도 파일 불러오기
-df = pd.read_csv('data\gu_total_count.csv', encoding='cp949')
+df = pd.read_csv('./data/gu_total_count.csv', encoding='cp949')
 df = df.set_index('시군구명')
 
 # 한글 폰트 지정

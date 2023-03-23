@@ -17,7 +17,7 @@ st.set_page_config(
     layout='wide')
 
 # 행정동별 신고빈도 파일 불러오기
-df = pd.read_csv('data/dong_total_count.csv')
+df = pd.read_csv('./data/dong_total_count.csv')
 df = df.set_index(keys='읍면동명', drop=True)
 
 st.subheader(':white_check_mark:2021년도 행정동별 구급신고 빈도(지도시각화)')
