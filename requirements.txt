@@ -1,0 +1,9 @@
+streamlit
+streamlit-folium
+matplotlib
+matplotlib.pyplot
+numpy
+pandas
+seaborn
+platform
+json
