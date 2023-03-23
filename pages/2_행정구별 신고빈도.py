@@ -6,14 +6,10 @@ import platform
 import matplotlib.font_manager as fm
 import seaborn as sns
 
-
-
 st.set_page_config(
     page_title = '구급출동 데이터 분석',
     page_icon = ':ambulance:',
     layout='wide')
-
-
 
 # 행정구별 신고빈도 파일 불러오기
 df = pd.read_csv('./data/gu_total_count.csv', encoding='cp949')
@@ -33,10 +29,10 @@ col1, col2 = st.columns([0.2,0.8])
 with col1 :
     if agree:
         df_sort = df.sort_values(by='신고건수', ascending=False)
-        df_sort
+        df_sort.iloc[:,:0]
         data = df_sort
     else:
-        df
+        df.iloc[:,:0]
         data = df
 
 with col2 :

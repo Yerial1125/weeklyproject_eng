@@ -93,7 +93,6 @@ with col5:
     df_1
     df_1['num'] = range(1,len(df_1)+1)
     df_1['num'] = df_1['num'].astype('str')+'th  select'
-    df_1
 
 with col6:
     sns.barplot(x=df_1.num, y='신고건수', data=df_1, color='skyblue')
