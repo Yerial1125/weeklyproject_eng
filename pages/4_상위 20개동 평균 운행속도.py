@@ -1,21 +1,11 @@
 # -*- coding: utf-8 -*-
+import matplotlib
 import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import platform
 from matplotlib import font_manager, rc
-plt.rcParams['axes.unicode_minus'] = False
-
-if platform.system() == 'Darwin':  # 맥OS
-    rc('font', family='AppleGothic')
-elif platform.system() == 'Windows':  # 윈도우
-    path = "c:/Windows/Fonts/malgun.ttf"
-    font_name = font_manager.FontProperties(fname=path).get_name()
-    rc('font', family=font_name)
-else:
-    print('Unknown system...  sorry~~~')
-
 
 st.set_page_config(
     page_title = '구급출동 데이터 분석',
@@ -75,8 +65,6 @@ else :
     sns.heatmap(dong_season, vmax=dong_season.max().max(), vmin=dong_season.min().min(), cmap='Reds', annot=annot,
                 fmt='.0f')
     st.pyplot(plt)
-
-
 
 
 

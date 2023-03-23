@@ -11,19 +11,16 @@ st.set_page_config(
     layout='wide')
 
 # 파일 불러오기
-df = pd.read_csv('data\dong_sex_count.csv')
+df = pd.read_csv('./data/dong_sex_count.csv')
 df = df.set_index('읍면동명', drop=True)
 
-# 한글 폰트 지정
-font_path = 'C:/Windows/Fonts/malgun.ttf'
-font_name = fm.FontProperties(fname=font_path).get_name()
-plt.rc('font', family=font_name)
+
 
 # 서울 전체 신고자 유형
-df_sex = pd.read_csv('data\신고자성별.csv')
-df_age = pd.read_csv('data\환자연령대.csv', encoding='euc-kr')
-df_season = pd.read_csv('data\계절별 신고빈도.csv', encoding='euc-kr')
-df_disease = pd.read_csv('data\서울질병유형.csv')
+df_sex = pd.read_csv('./data/신고자성별.csv')
+df_age = pd.read_csv('./data/환자연령대.csv', encoding='euc-kr')
+df_season = pd.read_csv('./data/계절별 신고빈도.csv', encoding='euc-kr')
+df_disease = pd.read_csv('./data/서울질병유형.csv')
 df_age['환자비율'] = df_age['환자수']/df_age['환자수'].sum()
 
 # 서울 전체 신고자유형 파이그래프
