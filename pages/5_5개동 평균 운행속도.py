@@ -4,17 +4,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import platform
-from matplotlib import font_manager, rc
-plt.rcParams['axes.unicode_minus'] = False
 
-if platform.system() == 'Darwin':  # 맥OS
-    rc('font', family='AppleGothic')
-elif platform.system() == 'Windows':  # 윈도우
-    path = "c:/Windows/Fonts/malgun.ttf"
-    font_name = font_manager.FontProperties(fname=path).get_name()
-    rc('font', family=font_name)
-else:
-    print('Unknown system...  sorry~~~')
 
 
 st.set_page_config(
