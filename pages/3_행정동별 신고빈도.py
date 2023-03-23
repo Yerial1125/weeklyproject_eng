@@ -5,10 +5,25 @@ import folium
 from streamlit_folium import st_folium
 import json
 import pandas as pd
+import platform
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import seaborn as sns
 from folium.plugins import MarkerCluster
+
+# 한글 폰트 지정
+from matplotlib import font_manager, rc
+plt.rcParams['axes.unicode_minus'] = False
+
+if platform.system() == 'Darwin':  # 맥OS
+    rc('font', family='AppleGothic')
+elif platform.system() == 'Windows':  # 윈도우
+    path = "c:/Windows/Fonts/malgun.ttf"
+    font_name = font_manager.FontProperties(fname=path).get_name()
+    rc('font', family=font_name)
+else:
+    print('Unknown system...  sorry~~~')
+
 
 # 페이지 설정
 st.set_page_config(
@@ -39,6 +54,8 @@ with col1 :
 with open ('data/seoul.json', encoding='utf-8') as f:
     geo_seoul = json.loads(f.read())
 
+dong_marker = pd.read_csv('./data/행정동좌표.csv')
+
 m = folium.Map(location=[37.566535, 126.9779691999996],zoom_start=11)
 folium.Choropleth(geo_data = geo_seoul,
                  data = df['신고건수'],
@@ -46,15 +63,10 @@ folium.Choropleth(geo_data = geo_seoul,
                   fill_color = 'YlGn', fill_opacity=0.7,
                   line_opacity=0.3,
                   key_on='feature.properties.EMD_NM',).add_to(m)
+
 with col2 :
     st_folium(m,width=750)
 st.markdown('---')
-
-
-# 그래프 한글 폰트 지정
-font_path = 'C:/Windows/Fonts/malgun.ttf'
-font_name = fm.FontProperties(fname=font_path).get_name()
-plt.rc('font', family=font_name)
 
 
 # 신고 빈도 상위 20개동 df, 바그래프

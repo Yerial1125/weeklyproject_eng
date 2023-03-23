@@ -2,9 +2,23 @@
 import streamlit as st
 import pandas as pd
 import seaborn as sns
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import platform
 
+
+# 한글 폰트 지정
+from matplotlib import font_manager, rc
+plt.rcParams['axes.unicode_minus'] = False
+
+if platform.system() == 'Darwin':  # 맥OS
+    rc('font', family='AppleGothic')
+elif platform.system() == 'Windows':  # 윈도우
+    path = "c:/Windows/Fonts/malgun.ttf"
+    font_name = font_manager.FontProperties(fname=path).get_name()
+    rc('font', family=font_name)
+else:
+    print('Unknown system...  sorry~~~')
 
 
 st.set_page_config(
@@ -35,7 +49,7 @@ with col1:
     button1 = st.radio('지역',('수유동','미아동','봉천동','신림동','화곡동'))
 
 with col2:
-    button2 = st.radio('거리',('단거리(4km이하)','중거리(4km초과 15km이하'))
+    button2 = st.radio('거리',('단거리(4km이하)','중거리(4km초과 15km이하)'))
 
 # 체크박스
 with col3:
@@ -44,13 +58,7 @@ with col3:
 
 st.markdown("---")
 
-plt.rc('font', size=8) # controls default text sizes
-plt.rc('axes', titlesize=8) # fontsize of the axes title
-plt.rc('axes', labelsize=8) # fontsize of the x and y labels
-plt.rc('xtick', labelsize=8) # fontsize of the tick labels
-plt.rc('ytick', labelsize=8) # fontsize of the tick labels
-plt.rc('legend', fontsize=8) # legend fontsize
-plt.rc('figure', titlesize=8)
+
 
 # 배치
 col1, col2 = st.columns([0.5,0.5])
@@ -64,11 +72,13 @@ with col1 :
     else:
         annot = False
     plt.figure(figsize=(22, 12))
-    sns.heatmap(data, vmax=data.max().max(), vmin=data.min().min(), cmap='Reds', annot=annot,
-                fmt='.2f')
-    plt.title(f'서울시 전체 : {button2} 현장 출동 평균시속', fontsize=16)
-    plt.yticks(rotation=0)
-    plt.ylabel('요일', rotation=0)
+    sns.heatmap(data*60, vmax=data.max().max()*60, vmin=data.min().min()*60, cmap='Reds', annot=annot, annot_kws={'size': 25},
+                fmt='.0f')
+    plt.title(f'서울시 전체 : {button2} 현장 출동 평균시속', fontsize=30)
+    plt.xlabel('시간대', fontsize=30)
+    plt.xticks(fontsize=30)
+    plt.yticks(fontsize=30, rotation=0)
+    plt.ylabel('')
     st.pyplot(plt)
 
 with col2 :
@@ -77,9 +87,10 @@ with col2 :
     else:
         annot = False
     plt.figure(figsize=(22, 12))
-    sns.heatmap(sec1_pv.loc[f'{button1}'].agg(weeks), cmap='Reds', annot=annot, fmt='.2f', annot_kws={'size': 15}, vmin=0.34,
-                    vmax=0.48)
-    plt.title(f'{button1} : {button2} 현장 출동 평균시속', fontsize=16)
-    plt.xlabel('시간대', fontsize=12)
-    plt.ylabel('요일', fontsize=12, rotation=0)
+    sns.heatmap(sec1_pv.loc[f'{button1}'].agg(weeks)*60, cmap='Reds', annot=annot, fmt='.0f', annot_kws={'size': 25}, vmin=0.34*60,
+                    vmax=0.48*60)
+    plt.title(f'{button1} : {button2} 현장 출동 평균시속', fontsize=30)
+    plt.xlabel('시간대', fontsize=30)
+    plt.xticks(fontsize=30)
+    plt.yticks(fontsize=30, rotation=0)
     st.pyplot(plt)
