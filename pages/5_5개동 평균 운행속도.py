@@ -49,7 +49,7 @@ with col1:
     button1 = st.radio('지역',('수유동','미아동','봉천동','신림동','화곡동'))
 
 with col2:
-    button2 = st.radio('거리',('단거리(4km이하)','중거리(4km초과 15km이하)'))
+    button2 = st.radio('거리',('under 4km','over 4km - under 15km'))
 
 # 체크박스
 with col3:
@@ -58,12 +58,10 @@ with col3:
 
 st.markdown("---")
 
-
-
 # 배치
 col1, col2 = st.columns([0.5,0.5])
 with col1 :
-    if button2 == '단거리(4km이하)':
+    if button2 == 'under 4km':
         data = day_hour_1
     else :
         data = day_hour_2
@@ -71,26 +69,43 @@ with col1 :
         annot = True
     else:
         annot = False
+    data.index = ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
     plt.figure(figsize=(22, 12))
     sns.heatmap(data*60, vmax=data.max().max()*60, vmin=data.min().min()*60, cmap='Reds', annot=annot, annot_kws={'size': 25},
                 fmt='.0f')
-    plt.title(f'서울시 전체 : {button2} 현장 출동 평균시속', fontsize=30)
-    plt.xlabel('시간대', fontsize=30)
+    plt.title(f'Seoul: {button2} Average driving speed', fontsize=30)
+    plt.xlabel('Time', fontsize=30)
     plt.xticks(fontsize=30)
     plt.yticks(fontsize=30, rotation=0)
     plt.ylabel('')
     st.pyplot(plt)
 
 with col2 :
+    if button2 == 'under 4km':
+        data2 = sec1_pv
+    else :
+        data2 = sec2_pv
     if num :
         annot = True
     else:
         annot = False
     plt.figure(figsize=(22, 12))
-    sns.heatmap(sec1_pv.loc[f'{button1}'].agg(weeks)*60, cmap='Reds', annot=annot, fmt='.0f', annot_kws={'size': 25}, vmin=0.34*60,
-                    vmax=0.48*60)
-    plt.title(f'{button1} : {button2} 현장 출동 평균시속', fontsize=30)
-    plt.xlabel('시간대', fontsize=30)
+    data2 = data2.loc[f'{button1}'].agg(weeks) * 60
+    data2.index = ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
+    sns.heatmap(data2, cmap='Reds', annot=annot, fmt='.0f', annot_kws={'size': 25}, vmin=data.min().min()*60,
+                    vmax=data.max().max()*60)
+    if button1 == '수유동':
+        button1 = 'Suyu-dong'
+    elif button1 == '미아동':
+        button1 = 'Mia-dong'
+    elif button1 == '봉천동':
+        button1 = 'Bongcheon-dong'
+    elif button1 == '신립동':
+        button1 = 'Sillim-dong'
+    else:
+        button1 = 'Hwagok-dong'
+    plt.title(f'{button1} : {button2} Average driving speed', fontsize=30)
+    plt.xlabel('Time', fontsize=30)
     plt.xticks(fontsize=30)
     plt.yticks(fontsize=30, rotation=0)
     st.pyplot(plt)

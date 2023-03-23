@@ -10,7 +10,7 @@ st.set_page_config(
     page_icon = ':ambulance:',
     layout= 'wide',
     menu_items= {
-        'Get Help' : 'https://github.com/Yerial1125/project',
+        'Get Help' : 'https://github.com/Yerial1125/weeklyproject_eng',
         'About':'다이소조 주간프로젝트 작업물입니다.'
     },
     initial_sidebar_state='expanded'

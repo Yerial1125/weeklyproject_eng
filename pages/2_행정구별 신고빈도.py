@@ -6,18 +6,6 @@ import platform
 import matplotlib.font_manager as fm
 import seaborn as sns
 
-# 한글 폰트 지정
-from matplotlib import font_manager, rc
-plt.rcParams['axes.unicode_minus'] = False
-
-if platform.system() == 'Darwin':  # 맥OS
-    rc('font', family='AppleGothic')
-elif platform.system() == 'Windows':  # 윈도우
-    path = "c:/Windows/Fonts/malgun.ttf"
-    font_name = font_manager.FontProperties(fname=path).get_name()
-    rc('font', family=font_name)
-else:
-    print('Unknown system...  sorry~~~')
 
 
 st.set_page_config(
@@ -30,6 +18,13 @@ st.set_page_config(
 # 행정구별 신고빈도 파일 불러오기
 df = pd.read_csv('./data/gu_total_count.csv', encoding='cp949')
 df = df.set_index('시군구명')
+
+# 구 영어
+gu_list = ['Gangnam','Gangdong','Gangbuk','Gangseo','Gwanak','Gwangjin','Guro','Geumcheon',
+           'Nowon','Dobong','Dongdaemun','Dongjak','Mapo','Seodaemun','Seocho','Seongdong',
+           'Seongbuk','Songpa','Yangcheon','Yeongdeungpo','Yongsan','Eunpyeong','Jongno',
+           'Jung-gu','Jungnang']
+df['eng'] = gu_list
 
 # 행정구별 신고빈도 df, 바그래프
 st.subheader(':white_check_mark:2021년도 행정구별 구급신고 빈도(전체)')
@@ -46,9 +41,9 @@ with col1 :
 
 with col2 :
     plt.figure(figsize=(15,10))
-    sns.barplot(x=data.index, y='신고건수', data=data, color='skyblue')
-    plt.xlabel('시군구명', fontsize=15)
-    plt.ylabel('신고건수', fontsize=15)
+    sns.barplot(x=data.eng, y='신고건수', data=data, color='skyblue')
+    plt.xlabel('Si_Gun_Gu', fontsize=15)
+    plt.ylabel('count', fontsize=15)
     plt.xticks(rotation=45, ha='right', fontsize=18)
     plt.yticks(fontsize=20)
     plt.grid('y')
@@ -67,9 +62,9 @@ with col3:
 
 with col4:
     plt.figure(figsize=(15,10))
-    sns.barplot(x=df_1.index, y='신고건수', data=df_1, color='skyblue')
-    plt.xlabel('시군구명', fontsize=15)
-    plt.ylabel('신고건수', fontsize=15)
+    sns.barplot(x=df_1.eng, y='신고건수', data=df_1, color='skyblue')
+    plt.xlabel('Si_Gun_Gu', fontsize=15)
+    plt.ylabel('count', fontsize=15)
     plt.xticks(rotation=45, ha='right', fontsize=18)
     plt.yticks(fontsize=20)
     plt.grid('y')
