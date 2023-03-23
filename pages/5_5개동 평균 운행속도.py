@@ -13,8 +13,8 @@ st.set_page_config(
     layout='wide'
 )
 # 파일 불러오기
-sec1_pv = pd.read_csv('./data/전체 단거리.csv', encoding='euc-kr')
-sec2_pv = pd.read_csv('./data/전체 중거리.csv', encoding='euc-kr')
+sec1_pv = pd.read_csv('./data/total_short.csv', encoding='euc-kr')
+sec2_pv = pd.read_csv('./data/total_middle.csv', encoding='euc-kr')
 sec1_pv = sec1_pv.set_index(['읍면동명','요일'])
 sec2_pv = sec2_pv.set_index(['읍면동명','요일'])
 
