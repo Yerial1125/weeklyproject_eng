@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import streamlit as st
 import pandas as pd
 import seaborn as sns
@@ -21,20 +22,36 @@ st.set_page_config(
     page_icon = ':ambulance:',
     layout='wide'
 )
+# 파일 불러오기
+sec1_pv = pd.read_csv('./data/전체 단거리.csv', encoding='euc-kr')
+sec2_pv = pd.read_csv('./data/전체 중거리.csv', encoding='euc-kr')
+sec1_pv = sec1_pv.set_index(['읍면동명','요일'])
+sec2_pv = sec2_pv.set_index(['읍면동명','요일'])
 
-time_df_new = pd.read_csv('./data/time_df_new.csv')
-time_df_new = time_df_new.drop(columns='Unnamed: 0')
+day_hour_1 = pd.read_csv('./data/day_hour_1.csv')
+day_hour_2 = pd.read_csv('./data/day_hour_2.csv')
+day_hour_1 = day_hour_1.set_index('Unnamed: 0')
+day_hour_2 = day_hour_2.set_index('Unnamed: 0')
 
 weeks = ['월요일','화요일','수요일','목요일','금요일','토요일','일요일']
 season = ['봄','여름','가을','겨울']
 
+st.subheader(':traffic_light:선정한 5개동의 평균 운행속도(km/h)')
+
 # 라디오 버튼
-st.subheader(':traffic_light:신고빈도 상위 20개동의 평균 운행속도(km/h)')
+col1, col2, col3 = st.columns([0.3, 0.3, 0.3])
 st.write('')
-button = st.radio('기준',('시간대별','요일별','월별','계절별'))
+with col1:
+    button1 = st.radio('지역',('수유동','미아동','봉천동','신림동','화곡동'))
+
+with col2:
+    button2 = st.radio('거리',('단거리(4km이하)','중거리(4km초과 15km이하'))
+
 # 체크박스
-st.write('조건')
-num = st.checkbox('차트내 값 표시')
+with col3:
+    st.write('조건')
+    num = st.checkbox('차트내 값 표시')
+
 st.markdown("---")
 
 plt.rc('font', size=8) # controls default text sizes
@@ -45,32 +62,34 @@ plt.rc('ytick', labelsize=8) # fontsize of the tick labels
 plt.rc('legend', fontsize=8) # legend fontsize
 plt.rc('figure', titlesize=8)
 
-if num :
-    annot = True
-else:
-    annot = False
-if button == '시간대별' :
-    plt.title('신고빈도 상위 20개동의 시간대별 평균 운행속도')
-    dong_hour = time_df_new.pivot_table(index='읍면동명', columns='출동시', values='거리(km)/시간(분)', aggfunc='mean')*60
-    plt.figure(figsize=(20, 10))
-    sns.heatmap(dong_hour, vmax=dong_hour.max().max(), vmin=dong_hour.min().min(), cmap='Reds', annot=annot, fmt='.0f')
+# 배치
+col1, col2 = st.columns([0.5,0.5])
+with col1 :
+    if button2 == '단거리(4km이하)':
+        data = day_hour_1
+    else :
+        data = day_hour_2
+    if num :
+        annot = True
+    else:
+        annot = False
+    plt.figure(figsize=(22, 12))
+    sns.heatmap(data, vmax=data.max().max(), vmin=data.min().min(), cmap='Reds', annot=annot,
+                fmt='.2f')
+    plt.title(f'서울시 전체 : {button2} 현장 출동 평균시속', fontsize=16)
+    plt.yticks(rotation=0)
+    plt.ylabel('요일', rotation=0)
     st.pyplot(plt)
-elif button == '요일별' :
-    dong_day = time_df_new.pivot_table(index='요일', columns='읍면동명', values='거리(km)/시간(분)', aggfunc='mean').agg(weeks).T*60
-    plt.title('신고빈도 상위 20개동의 요일별 평균 운행속도')
-    plt.figure(figsize=(20, 10))
-    sns.heatmap(dong_day, vmax=dong_day.max().max(), vmin=dong_day.min().min(), cmap='Reds', annot=annot, fmt='.0f')
-    st.pyplot(plt)
-elif button == '월별' :
-    dong_month = time_df_new.pivot_table(index=['읍면동명'], columns='출동월', values='거리(km)/시간(분)', aggfunc='mean')*60
-    plt.title('신고빈도 상위 20개동의 월별 평균 운행속도')
-    plt.figure(figsize=(20, 10))
-    sns.heatmap(dong_month, vmax=dong_month.max().max(), vmin=dong_month.min().min(), cmap='Reds', annot=annot,fmt='.0f')
-    st.pyplot(plt)
-else :
-    dong_season = time_df_new.pivot_table(index=['계절구분명'], columns='읍면동명', values='거리(km)/시간(분)', aggfunc='mean').agg(season).T*60
-    plt.title('신고빈도 상위 20개동의 계절별 평균 운행속도')
-    plt.figure(figsize=(20, 10))
-    sns.heatmap(dong_season, vmax=dong_season.max().max(), vmin=dong_season.min().min(), cmap='Reds', annot=annot,
-                fmt='.0f')
+
+with col2 :
+    if num :
+        annot = True
+    else:
+        annot = False
+    plt.figure(figsize=(22, 12))
+    sns.heatmap(sec1_pv.loc[f'{button1}'].agg(weeks), cmap='Reds', annot=annot, fmt='.2f', annot_kws={'size': 15}, vmin=0.34,
+                    vmax=0.48)
+    plt.title(f'{button1} : {button2} 현장 출동 평균시속', fontsize=16)
+    plt.xlabel('시간대', fontsize=12)
+    plt.ylabel('요일', fontsize=12, rotation=0)
     st.pyplot(plt)
